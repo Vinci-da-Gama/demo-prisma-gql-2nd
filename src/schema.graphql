@@ -1,0 +1,49 @@
+type Query {
+  feed: [Post!]!
+  drafts: [Post!]!
+  post(id: ID!): Post
+  courses: [Course!]!
+}
+
+type Mutation {
+  createDraft(title: String!, content: String): Post
+  createCourse(data: CourseCreateInput!): Course!
+  updateCourse(data: CourseUpdateInput!,
+    where: CourseWhereUniqueInput!): Course
+  deleteCourse(where: CourseWhereUniqueInput!): Course
+  deletePost(id: ID!): Post
+  publish(id: ID!): Post
+}
+
+type Post {
+  id: ID!
+  published: Boolean!
+  title: String!
+  content: String!
+}
+
+# if you create new type and deploy in prisma,
+# you have to copy it from prisma-schema.js to here manully
+type Course {
+  id: ID!
+  isPublished: Boolean!
+  name: String!
+  description: String!
+}
+
+input CourseCreateInput {
+  id: ID
+  isPublished: Boolean
+  name: String!
+  description: String!
+}
+
+input CourseUpdateInput {
+	isPublished: Boolean
+	name: String
+	description: String
+}
+
+input CourseWhereUniqueInput {
+	id: ID
+}

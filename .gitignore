@@ -1,0 +1,16 @@
+# folder
+instructions/
+
+# files
+.env*
+dist
+package-lock.json
+node_modules
+.idea
+.vscode
+*.log
+yarn.lock
+**/*.txt
+test_add_Env_Back.py
+add_Env_Back.py
+addScriptToPackageJsonAndResolverToIndex.py
