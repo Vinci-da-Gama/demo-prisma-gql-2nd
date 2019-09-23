@@ -10,3 +10,14 @@ export const GET_ALL_COURSES = gql`
         }
     }
 `;
+
+export const GET_COURSE_VIA_ID = gql`
+    query GetCourseViaId($where: CourseWhereUniqueInput!) {
+        course(where: $where) {
+            id
+            name
+            description
+            isPublished
+        }
+    }
+`;

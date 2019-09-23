@@ -16,6 +16,7 @@ const AppNavbars = (props) => {
                     <NavLink className="nav-link" to={rls.landing} exact>Courses</NavLink>
                     <NavLink className="nav-link" to={rls.cc}>Create Course</NavLink>
                     <NavLink className="nav-link" to={rls.custQuery}>Custom Client Query</NavLink>
+                    <NavLink className="nav-link" to={rls.editCourse}>Edit Course</NavLink>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

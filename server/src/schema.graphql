@@ -3,6 +3,7 @@ type Query {
   drafts: [Post!]!
   post(id: ID!): Post
   courses: [Course!]!
+  course(where: CourseWhereUniqueInput!): Course
 }
 
 type Mutation {
@@ -13,6 +14,24 @@ type Mutation {
   deleteCourse(where: CourseWhereUniqueInput!): Course
   deletePost(id: ID!): Post
   publish(id: ID!): Post
+  signupUser(data: UserCreateInput!): AuthenPayload!
+}
+
+type AuthenPayload {
+  token: String!
+  user: User
+}
+
+type User {
+  id: ID!
+  email: String!
+  password: String!
+}
+
+input UserCreateInput {
+  id: ID
+  email: String!
+  password: String!
 }
 
 type Post {

@@ -1,22 +1,3 @@
-const Query = {
-    feed: (parent, args, context) => {
-        return context.prisma.posts({ where: { published: true } })
-    },
-    drafts: (parent, args, context) => {
-        return context.prisma.posts({ where: { published: false } })
-    },
-    post: (parent, { id }, context) => {
-        return context.prisma.post({ id })
-    },
-    courses: (parent, args, ctx, info) => {
-        // console.log('12 -- ctx(everything about reqest return): ', ctx)
-        // console.log('13 -- info(everything about query): ', info)
-        return ctx.prisma.courses({
-            where: { isPublished: true }
-        })
-    }
-};
-
 const Mutation = {
     createDraft(parent, { title, content }, context) {
         return context.prisma.createPost({
@@ -46,4 +27,4 @@ const Mutation = {
     }
 }
 
-module.exports = { Query, Mutation };
+module.exports = Mutation;

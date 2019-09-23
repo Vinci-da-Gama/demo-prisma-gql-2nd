@@ -1,5 +1,6 @@
 export const rls = {
     landing: '/',
     cc: '/createCourse',
-    custQuery: '/customGqlQuery'
+    custQuery: '/customGqlQuery',
+    editCourse: '/course/:id/edit'
 };

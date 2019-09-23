@@ -1,4 +1,6 @@
 export const OptNames = {
     courses: 'courses',
-    createCourse: 'createCourse'
+    course: 'course',
+    createCourse: 'createCourse',
+    uc: 'updateCourse'
 };

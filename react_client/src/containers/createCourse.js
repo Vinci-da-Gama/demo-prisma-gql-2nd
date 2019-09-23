@@ -49,7 +49,6 @@ const CreateCourse = (props) => {
                 courses: [createCourse, ...courses]
             }
         })
-        debugger
     }
 
     return (
@@ -65,8 +64,7 @@ const CreateCourse = (props) => {
                         // data: { ...ccForm }
                         // }}
                         update={(cache, { data: { createCourse } }) => {
-                            console.log('68 -- cache: ', cache)
-                            console.log('69 -- createCourse: ', createCourse)
+                            {/* console.log('68 -- cache: ', cache) */}
                             // only show published course
                             if (createCourse.isPublished) {
                                 const { courses } = cache.readQuery({
@@ -79,7 +77,6 @@ const CreateCourse = (props) => {
                                     }
                                 })
                             }
-                            debugger
                         }}
                     >
                         {(createCourse, { data, loading, error }) => {
