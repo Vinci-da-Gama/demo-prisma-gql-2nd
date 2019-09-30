@@ -7,10 +7,11 @@ import Button from 'react-bootstrap/Button';
 import { Mutation } from 'react-apollo';
 
 import { CREATE_COURSE } from '../graphQL/mutations';
-import { GET_ALL_COURSES } from '../graphQL/queries';
+import { GET_COURSES_WITH_PAGINATION_AND_FILTER } from '../graphQL/queries';
 import { rls } from '../constants/routesNlinks';
 import Spinner from '../shared/Spinner';
 import ErrMsg from '../shared/ErrorMessage';
+import { OptNames } from '../constants/gqlOptNames';
 
 const initCreateCourseForm = {
     name: '',
@@ -47,10 +48,10 @@ const CreateCourse = ({
     const afterCreateUpdateCachedData = (cache, { data: { createCourse } }) => {
         console.log('42 -- cache: ', cache)
         const { courses } = cache.readQuery({
-            query: GET_ALL_COURSES
+            query: GET_COURSES_WITH_PAGINATION_AND_FILTER
         });
         cache.writeQuery({
-            query: GET_ALL_COURSES,
+            query: GET_COURSES_WITH_PAGINATION_AND_FILTER,
             data: {
                 courses: [createCourse, ...courses]
             }
@@ -70,19 +71,22 @@ const CreateCourse = ({
                         // data: { ...ccForm }
                         // }}
                         update={(cache, { data: { createCourse } }) => {
-                            {/* console.log('68 -- cache: ', cache) */}
                             // only show published course
-                            if (createCourse.isPublished) {
-                                const { courses } = cache.readQuery({
-                                    query: GET_ALL_COURSES
-                                });
-                                cache.writeQuery({
-                                    query: GET_ALL_COURSES,
-                                    data: {
-                                        courses: [createCourse, ...courses]
+                            const { courses } = cache.readQuery({
+                                query: GET_COURSES_WITH_PAGINATION_AND_FILTER
+                            });
+                            {/* console.log('78 -- courses: ', courses) */ }
+                            cache.writeQuery({
+                                query: GET_COURSES_WITH_PAGINATION_AND_FILTER,
+                                data: {
+                                    courses: {
+                                        ...courses,
+                                        courses: [createCourse, ...courses[OptNames.courses]]
                                     }
-                                })
-                            }
+                                }
+                            })
+                            {/* if (createCourse.isPublished) {
+                            } */}
                         }}
                         onCompleted={() => {
                             setCcForm(initCreateCourseForm);
