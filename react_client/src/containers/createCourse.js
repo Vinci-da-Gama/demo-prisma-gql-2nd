@@ -8,6 +8,9 @@ import { Mutation } from 'react-apollo';
 
 import { CREATE_COURSE } from '../graphQL/mutations';
 import { GET_ALL_COURSES } from '../graphQL/queries';
+import { rls } from '../constants/routesNlinks';
+import Spinner from '../shared/Spinner';
+import ErrMsg from '../shared/ErrorMessage';
 
 const initCreateCourseForm = {
     name: '',
@@ -15,7 +18,10 @@ const initCreateCourseForm = {
     isPublished: false
 }
 
-const CreateCourse = (props) => {
+const CreateCourse = ({
+    history,
+    match
+}) => {
     const [ccForm, setCcForm] = useState(initCreateCourseForm);
 
     const handleCcFormChange = (e) => {
@@ -78,8 +84,14 @@ const CreateCourse = (props) => {
                                 })
                             }
                         }}
+                        onCompleted={() => {
+                            setCcForm(initCreateCourseForm);
+                            history.push(rls.landing)
+                        }}
                     >
                         {(createCourse, { data, loading, error }) => {
+                            if (loading) return <Spinner />
+                            if (error) return <ErrMsg error={error} />
                             return (
                                 <Form
                                     name="CreateCourseForm"
@@ -145,6 +157,9 @@ const CreateCourse = (props) => {
     )
 }
 
-CreateCourse.propTypes = {};
+CreateCourse.propTypes = {
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired
+};
 
 export default CreateCourse;

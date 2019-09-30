@@ -44,7 +44,9 @@ const EditCourse = ({
                 where: { id: match.params.id }
             }}
         >
-            {({ data }, error, loading) => {
+            {({ data }, loading, error) => {
+                console.log('48 -- loading: ', loading)
+                console.log('49 -- error: ', error)
                 if (loading) return <Spinner />
                 if (error) return <ErrMsg error={error} />
                 if (!data) return <Spinner />

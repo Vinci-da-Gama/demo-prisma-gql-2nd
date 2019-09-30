@@ -2,7 +2,7 @@
   "name": "demo-gql-app",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon -e graphql,js src/index.js",
     "prisma": "prisma"
   },
   "dependencies": {

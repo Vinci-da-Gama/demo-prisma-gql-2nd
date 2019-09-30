@@ -10,10 +10,12 @@ type Course {
   isPublished: Boolean! @default(value: false)
   name: String!
   description: String!
+  postedBy: User
 }
 
 type User {
   id: ID! @id
   email: String! @unique
   password: String!
+  relatedCourses: [Course!]!
 }

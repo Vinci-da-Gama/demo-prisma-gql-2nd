@@ -14,6 +14,7 @@ import { getOperationAST } from 'graphql';
 
 import { storageStr } from '../constants/storageConst';
 
+
 const httpLink = new HttpLink({
 	uri: 'http://localhost:4000', // local
 	// uri: 'https://us1.prisma.sh/john-doe-ff2866/demo-gqlprisma-server/dev', // heroku
@@ -22,11 +23,13 @@ const httpLink = new HttpLink({
 });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-    // add the authorization to the headers
-    const lsuToken = localStorage.getItem(storageStr.utk);
+	// add the authorization to the headers
+	const lsuToken = localStorage.getItem(storageStr.utk);
+	// console.log('28 -- ApolloClient.js operation: ', operation)
+	// console.log('29 -- ApolloClient.js lsuToken: ', lsuToken)
 	operation.setContext({
 		headers: {
-			authorization: lsuToken ? lsuToken : null
+			Authorization: lsuToken ? `Bearer ${lsuToken}` : null
 		}
 	});
 
@@ -39,7 +42,7 @@ const link = ApolloLink.split(
 	// this is grahql way to identify which operation is (query, mutation or subscription)
 	operation => {
 		const operationAST = getOperationAST(operation.query, operation.operationName);
-		console.log('43 -- operationAST: ', operationAST);
+		console.log('45 -- operationAST: ', operationAST);
 		return !!operationAST && operationAST.operation === 'subscription';
 	},
 	// using the ability to split links, you can send data to each link
@@ -76,12 +79,12 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 	if (graphQLErrors)
 		graphQLErrors.map(({ message, locations, path }) =>
 			console.log(
-				`80 -- ApolloClient.js -- error link : [GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+				`82 -- ApolloClient.js -- error link : [GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
 			)
 		);
 
 	if (networkError) {
-		console.log(`85 -- error link: [Network error]: ${networkError}`);
+		console.log(`87 -- error link: [Network error]: ${networkError}`);
 		if (networkError.statusCode === 401) {
 			localStorage.removeItem(storageStr.utk);
 		}

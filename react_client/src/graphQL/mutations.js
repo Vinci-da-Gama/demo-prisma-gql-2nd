@@ -1,5 +1,29 @@
 import gql from 'graphql-tag';
 
+export const SIGNUP_USER = gql`
+    mutation SignupUser($data: UserBasicInput!) {
+        signupUser(data: $data) {
+            token
+            user {
+                id
+                email
+            }
+        }
+    }
+`;
+
+export const LOGIN_USER = gql`
+    mutation LoginUser($data: UserBasicInput!) {
+        loginUser(data: $data) {
+            token
+            user {
+                id
+                email
+            }
+        }
+    }
+`;
+
 export const CREATE_COURSE = gql`
     mutation CreateCourse($data: CourseCreateInput!) {
         createCourse(data: $data) {

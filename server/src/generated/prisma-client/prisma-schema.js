@@ -24,6 +24,7 @@ type Course {
   isPublished: Boolean!
   name: String!
   description: String!
+  postedBy: User
 }
 
 type CourseConnection {
@@ -33,6 +34,19 @@ type CourseConnection {
 }
 
 input CourseCreateInput {
+  id: ID
+  isPublished: Boolean
+  name: String!
+  description: String!
+  postedBy: UserCreateOneWithoutRelatedCoursesInput
+}
+
+input CourseCreateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
+  connect: [CourseWhereUniqueInput!]
+}
+
+input CourseCreateWithoutPostedByInput {
   id: ID
   isPublished: Boolean
   name: String!
@@ -62,6 +76,56 @@ type CoursePreviousValues {
   description: String!
 }
 
+input CourseScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  isPublished: Boolean
+  isPublished_not: Boolean
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  AND: [CourseScalarWhereInput!]
+  OR: [CourseScalarWhereInput!]
+  NOT: [CourseScalarWhereInput!]
+}
+
 type CourseSubscriptionPayload {
   mutation: MutationType!
   node: Course
@@ -84,12 +148,53 @@ input CourseUpdateInput {
   isPublished: Boolean
   name: String
   description: String
+  postedBy: UserUpdateOneWithoutRelatedCoursesInput
+}
+
+input CourseUpdateManyDataInput {
+  isPublished: Boolean
+  name: String
+  description: String
 }
 
 input CourseUpdateManyMutationInput {
   isPublished: Boolean
   name: String
   description: String
+}
+
+input CourseUpdateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
+  delete: [CourseWhereUniqueInput!]
+  connect: [CourseWhereUniqueInput!]
+  set: [CourseWhereUniqueInput!]
+  disconnect: [CourseWhereUniqueInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutPostedByInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutPostedByInput!]
+  deleteMany: [CourseScalarWhereInput!]
+  updateMany: [CourseUpdateManyWithWhereNestedInput!]
+}
+
+input CourseUpdateManyWithWhereNestedInput {
+  where: CourseScalarWhereInput!
+  data: CourseUpdateManyDataInput!
+}
+
+input CourseUpdateWithoutPostedByDataInput {
+  isPublished: Boolean
+  name: String
+  description: String
+}
+
+input CourseUpdateWithWhereUniqueWithoutPostedByInput {
+  where: CourseWhereUniqueInput!
+  data: CourseUpdateWithoutPostedByDataInput!
+}
+
+input CourseUpsertWithWhereUniqueWithoutPostedByInput {
+  where: CourseWhereUniqueInput!
+  update: CourseUpdateWithoutPostedByDataInput!
+  create: CourseCreateWithoutPostedByInput!
 }
 
 input CourseWhereInput {
@@ -137,6 +242,7 @@ input CourseWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  postedBy: UserWhereInput
   AND: [CourseWhereInput!]
   OR: [CourseWhereInput!]
   NOT: [CourseWhereInput!]
@@ -336,6 +442,7 @@ type User {
   id: ID!
   email: String!
   password: String!
+  relatedCourses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course!]
 }
 
 type UserConnection {
@@ -345,6 +452,18 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
+  email: String!
+  password: String!
+  relatedCourses: CourseCreateManyWithoutPostedByInput
+}
+
+input UserCreateOneWithoutRelatedCoursesInput {
+  create: UserCreateWithoutRelatedCoursesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutRelatedCoursesInput {
   id: ID
   email: String!
   password: String!
@@ -391,11 +510,31 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   email: String
   password: String
+  relatedCourses: CourseUpdateManyWithoutPostedByInput
 }
 
 input UserUpdateManyMutationInput {
   email: String
   password: String
+}
+
+input UserUpdateOneWithoutRelatedCoursesInput {
+  create: UserCreateWithoutRelatedCoursesInput
+  update: UserUpdateWithoutRelatedCoursesDataInput
+  upsert: UserUpsertWithoutRelatedCoursesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutRelatedCoursesDataInput {
+  email: String
+  password: String
+}
+
+input UserUpsertWithoutRelatedCoursesInput {
+  update: UserUpdateWithoutRelatedCoursesDataInput!
+  create: UserCreateWithoutRelatedCoursesInput!
 }
 
 input UserWhereInput {
@@ -441,6 +580,9 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  relatedCourses_every: CourseWhereInput
+  relatedCourses_some: CourseWhereInput
+  relatedCourses_none: CourseWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

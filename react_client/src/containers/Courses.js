@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { GET_ALL_COURSES } from '../graphQL/queries';
 import { DELETE_COURSE } from '../graphQL/mutations';
 import { OptNames } from '../constants/gqlOptNames';
+import { storageStr } from '../constants/storageConst';
 import Spinner from '../shared/Spinner';
 import ErrMsg from '../shared/ErrorMessage';
 
@@ -20,7 +21,7 @@ const renderCourses = ({ data, loading, error }) => {
         const { courses } = cache.readQuery({
             query: GET_ALL_COURSES
         });
-        console.log('23 -- courses: ', courses)
+        console.log('28 -- courses: ', courses)
         cache.writeQuery({
             query: GET_ALL_COURSES,
             data: {
@@ -37,35 +38,41 @@ const renderCourses = ({ data, loading, error }) => {
                 </Card.Title>
                 <Card.Body>
                     Description: <Card.Text>{el.description}</Card.Text>
-                    <Link
-                        to={`/course/${el.id}/edit`}
-                        className="btn btn-primary"
-                    >
-                        Edit
-                    </Link>
-                    <Mutation
-                        mutation={DELETE_COURSE}
-                        variables={{
-                            where: { id: el.id }
-                        }}
-                        update={updateAfterDelete}
-                    >
-                        {(deleteCourse, { data, loading, error }) => {
-                            if (loading) return <Spinner />
-                            if (error) return <ErrMsg error={error} />
-                            return (
-                                <Button
-                                    className="ml-1"
-                                    variant="danger"
-                                    onClick={async (event) => {
-                                        await deleteCourse()
-                                    }}
+                    {
+                        localStorage.getItem(storageStr.utk) ? (
+                            <>
+                                <Link
+                                    to={`/course/${el.id}/edit`}
+                                    className="btn btn-primary"
                                 >
-                                    Delete
-                            </Button>
-                            )
-                        }}
-                    </Mutation>
+                                    Edit
+                                </Link>
+                                <Mutation
+                                    mutation={DELETE_COURSE}
+                                    variables={{
+                                        where: { id: el.id }
+                                    }}
+                                    update={updateAfterDelete}
+                                >
+                                    {(deleteCourse, { data, loading, error }) => {
+                                        if (loading) return <Spinner />
+                                        if (error) return <ErrMsg error={error} />
+                                        return (
+                                            <Button
+                                                className="ml-1"
+                                                variant="danger"
+                                                onClick={async (event) => {
+                                                    await deleteCourse()
+                                                }}
+                                            >
+                                                Delete
+                                            </Button>
+                                        )
+                                    }}
+                                </Mutation>
+                            </>
+                        ) : null
+                    }
                 </Card.Body>
             </Card>
         )
